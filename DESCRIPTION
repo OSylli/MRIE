@@ -1,0 +1,17 @@
+Package: MRIE
+Title: Mendelian Randomization with Incomplete Measurement on the Exposure
+Version: 0.0.1
+Authors@R: 
+    person("Yilun", "Li", email = "yilunli1997@gmail.com", role = c("aut", "cre"))
+Description: This package is used for Mendelian randomization analysis with a continuous exposure and a continuous outcome, where the exposure variable is potentially unmeasured or non-detectable. The estimations are carried out based on the maximum likelihood estimation method, and the EM algorithm is applied to cope with the incomplete measurements on the exposure.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.2
+Imports: Rcpp (>= 0.11.0), RcppArmadillo, data.table, stats
+Suggests: 
+    testthat (>= 3.0.0),
+    devtools,
+    rmarkdown
+LinkingTo: Rcpp, RcppArmadillo
+Config/testthat/edition: 3
