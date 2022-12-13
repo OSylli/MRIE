@@ -46,7 +46,8 @@ The estimations are carried out based on the maximum likelihood estimation metho
 and the EM algorithm is applied to cope with the incomplete measurements on the exposure.
 }
 \details{
-Let \eqn{Y} be a continuous outcome, \eqn{S} be a continuous exposure, \eqn{G} be a
+Let \eqn{Y} be a continuous outcome, \eqn{S} be a continuous exposure which is
+potentially unmeasured or subject to detection limits, \eqn{G} be a
 vector of instrumental variables for \eqn{S}, and \eqn{Z} be a vector of measured covariates.
 Assume that the first component of \eqn{Z} is 1, and let \eqn{X = (G^T, Z^T)^T}. The
 following model is considered:

@@ -27,7 +27,8 @@
 #' iterations is less than this value. Default as \eqn{10^{-5}}.
 #' 
 #' @details 
-#' Let \eqn{Y} be a continuous outcome, \eqn{S} be a continuous exposure, \eqn{G} be a 
+#' Let \eqn{Y} be a continuous outcome, \eqn{S} be a continuous exposure which is 
+#' potentially unmeasured or subject to detection limits, \eqn{G} be a 
 #' vector of instrumental variables for \eqn{S}, and \eqn{Z} be a vector of measured covariates. 
 #' Assume that the first component of \eqn{Z} is 1, and let \eqn{X = (G^T, Z^T)^T}. The 
 #' following model is considered:
