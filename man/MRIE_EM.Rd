@@ -7,18 +7,18 @@
 MRIE_EM(IV.dat, pheno.dat, covar.dat = NULL, epsilon = 1e-05)
 }
 \arguments{
-\item{IV.dat}{A data frame containing data on the instrumental variables (IVs) for all
+\item{IV.dat}{A required data frame containing data on the instrumental variables (IVs) for all
 the subjects, with a header line indicating the names of the IVs. Each row corresponds
-to one subject, and each column corresponds to one IV. Values can be SNP dosages,
-polygenic risk scores, etc. Missing value or \code{NA} is not allowed.}
+to one subject, and each column corresponds to one IV, such as SNP dosages and
+polygenic risk scores. Missing value or \code{NA} is not allowed.}
 
-\item{pheno.dat}{A data frame containing data on the outcome and the exposure, with a
+\item{pheno.dat}{A required data frame containing data on the outcome and the exposure, with a
 header line indicating their names. Missing value or \code{NA} is not allowed. Each row
 corresponds to one subject, and the subjects should be listed in the same order as
-in \code{IV.dat}. The dataset\code{pheno.dat} should have 3 columns. The 1st column
-contains the floating-point values for the continuous outcome. The 2nd column (integer
-valued) and the 3rd column (floating-point valued) contain information on the exposure
-variable. See the "Details" section for instructions on how the 2nd and the 3rd column
+in \code{IV.dat}. The dataset \code{pheno.dat} should have three columns. The first column
+contains the floating-point values for the continuous outcome. The second column
+(integer-valued) and the third column (floating-point valued) contain information on the exposure
+variable. See the "Details" section for instructions on how the second and the third column
 should be specified.}
 
 \item{covar.dat}{An optional data frame containing data on the measured covariates
@@ -32,25 +32,33 @@ terminated if the Euclidean distance between the parameter values at two success
 iterations is less than this value. Default as \eqn{10^{-5}}.}
 }
 \value{
-A list will be returned with the following elements:
+A list will be returned with the following components:
 \itemize{
-\item{\code{results_reg} contains the parameter estimates, the standard error estimates, and the p-values for \eqn{\gamma} and the components in \eqn{\alpha} and \eqn{\beta}.}
-\item{\code{results_var} contains the estimates for the variance components (i.e., the variances of \eqn{\epsilonS} and \eqn{\epsilonY}, and the correlation between \eqn{\epsilonS} and \eqn{\epsilonY}).}
-\item{\code{full_cov_mat} is the estimated covariance matrix derived from the Louis formula.}
+\item{\code{results_reg} contains the parameter estimates for \eqn{\gamma}
+and the components in \eqn{\alpha} and \eqn{\beta}. The standard error
+estimates of the estimated parameters and the corresponding p-values are also
+provided. The inference on the causal effect of interest is presented in the
+last row.}
+\item{\code{results_var} contains the estimates for the variance components
+(i.e., the variances of \eqn{\epsilonS} and \eqn{\epsilonY} and the
+correlation between \eqn{\epsilonS} and \eqn{\epsilonY}).}
+\item{\code{full_cov_mat} is the estimated covariance matrix of the parameter
+estimates derived from the Louis formula.}
 }
 }
 \description{
-This function is used for MR analysis with a continuous exposure and a continuous
-outcome, where the exposure variable is potentially unmeasured or non-detectable.
-The estimations are carried out based on the maximum likelihood estimation method,
-and the EM algorithm is applied to cope with the incomplete measurements on the exposure.
+This function is used for MR analysis with a continuous outcome and a continuous
+exposure that is potentially unmeasured or non-detectable. The estimations are
+carried out based on the maximum likelihood estimation method, and the EM algorithm
+is used for the computation. The covariance matrix of the estimated parameters is
+derived from the Louis formula (Little and Rubin, 2019).
 }
 \details{
-Let \eqn{Y} be a continuous outcome, \eqn{S} be a continuous exposure which is
+Let \eqn{Y} be a continuous outcome, \eqn{S} be a continuous exposure that is
 potentially unmeasured or subject to detection limits, \eqn{G} be a
-vector of instrumental variables for \eqn{S}, and \eqn{Z} be a vector of measured covariates.
+vector of IVs for \eqn{S}, and \eqn{Z} be a vector of measured covariates.
 Assume that the first component of \eqn{Z} is 1, and let \eqn{X = (G^T, Z^T)^T}. The
-following model is considered:
+following models are considered:
 \deqn{S = \alpha'X + \epsilonS,}
 \deqn{Y = \gammaS + \beta'Z + \epsilonY,}
 where \eqn{\alpha} and \eqn{\beta} are vectors of regression parameters, \eqn{\gamma}
@@ -60,19 +68,14 @@ an unstructured covariance matrix. We allow a nonzero correlation between \eqn{\
 and \eqn{\epsilonY} to account for the potential unmeasured confounders of the
 exposure-outcome relationship.
 
-The exposure variable \eqn{S} may be unmeasured or subject to detection limits. This
-function employs the EM algorithm to cope with these incomplete measurements and derive
-the parameter estimates, and the covariance matrix of the estimated parameters is derived
-from the Louis formula (Little and Rubin, 2019).
-
-For \code{pheno.dat}, the i-th element of the 2nd column indicates whether the
-exposure of i-th subject is observed, beyond detection limits, or unmeasured, and the
-corresponding value in the 3rd column should be the exact measurement on the exposure, the
+For the argument \code{pheno.dat}, the i-th element of the second column indicates whether the
+exposure of the i-th subject is observed, beyond detection limits, or unmeasured, and the
+corresponding value in the third column should be the exact measurement on the exposure, the
 detection limit, and a dummy value of -999, respectively. Below is a table showing how
-these two columns should be specified when the exposure variable is observed, beyond
+the second and the third column should be specified when the exposure variable is observed, beyond
 detection limits, or unmeasured.\tabular{lcc}{
     \tab The 2nd column \tab The 3rd column \cr
-   Measured and Detectable \tab 0 \tab the exact measurement \cr
+   Measured and detectable \tab 0 \tab the exact measurement \cr
    Measured but below the lower detection limit \tab 1 \tab the lower detection limit \cr
    Measured but above the upper detection limit \tab 2 \tab the upper detection limit \cr
    Unmeasured \tab 3 \tab -999 \cr
