@@ -98,7 +98,7 @@ MRIE_EM <- function(IV.dat, pheno.dat, covar.dat = NULL, epsilon = 1e-5){
   }
   if(!is.null(covar.dat)){
     if(sum(is.na(covar.dat)) > 0){
-      stop("NA is not allowed in the instrumental variable dataset.")
+      stop("NA is not allowed in the covariate variables dataset.")
     }
   }
 
